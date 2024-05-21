@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define INITIAL_CAPACITY 16
-
 struct Vector *Vector_create(size_t item_size, void (*dealloc)(void *),
                              bool (*compare)(void *, void *),
                              void (*print)(void *)) {

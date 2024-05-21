@@ -1,6 +1,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#define INITIAL_CAPACITY 16
+
 struct Vector {
     void *items;
     size_t item_size;
