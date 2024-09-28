@@ -133,27 +133,19 @@ func (list *StringList) RemoveValue(value string) bool {
 		panic("cannot remove value from empty list")
 	}
 
-	var (
-		prev *StringNode
-		iter *StringNode = list.head
-	)
-
-	for iter.next != nil {
-		if iter.value == value {
-			if prev != nil {
-				prev.next = iter.next
-			} else {
-				list.head = iter.next
-			}
-			iter.next = nil
-			return true
-		}
-
-		prev = iter
-		iter = iter.next
+	prev, iter, ok := list.getNodeByValue(value)
+	if !ok {
+		return false
 	}
 
-	return false
+	if prev != nil {
+		prev.next = iter.next
+	} else {
+		list.head = iter.next
+	}
+	iter.next = nil
+
+	return true
 }
 
 func (list *StringList) getTailNode() (i int, p *StringNode, t *StringNode) {
@@ -201,6 +193,24 @@ func (list *StringList) getNodeAt(index int) (p *StringNode, i *StringNode) {
 	}
 
 	return prev, iter
+}
+
+func (list *StringList) getNodeByValue(value string) (p *StringNode, i *StringNode, ok bool) {
+	if list.head == nil {
+		panic("cannot get node of empty list")
+	}
+
+	var (
+		prev *StringNode
+		iter *StringNode = list.head
+	)
+
+	for iter.value != value && iter.next != nil {
+		prev = iter
+		iter = iter.next
+	}
+
+	return prev, iter, iter.value == value
 }
 
 func (list StringList) String() string {
